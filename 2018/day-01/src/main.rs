@@ -33,8 +33,6 @@ fn main() {
             count += id_val;
             let hc = hit_count.entry(count).or_insert(0);
             *hc += 1;
-
-            println!("{}: {}", count, *hc);
             
             if !has_hit_twice && *hc > 1 {
                 has_hit_twice = true;
