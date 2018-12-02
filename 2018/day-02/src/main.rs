@@ -1,33 +1,40 @@
+use std::collections::HashMap;
 use std::env;
-use std::path::Path;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Error, ErrorKind};
-use std::collections::HashMap;
+use std::path::Path;
 use std::str;
 
 fn main() {
-	let args: Vec<String> = env::args().collect();
+    let args: Vec<String> = env::args().collect();
     let file_name: String = match args.get(1) {
-		Some(val) => val.to_string(),
-		None => {
-			println!("A text file must be provided!");
-			return
-		}
-	};
-    let file = File::open(&Path::new(&file_name)).unwrap();
-	let box_vals: Vec<String> = match BufReader::new(file).lines().map(|line|
-    	line.and_then(|v| v.parse::<String>().map_err(|e| Error::new(ErrorKind::InvalidData, e)))
-    ).collect() {
-    	Ok(vals) => vals,
-        Err(e) => {
-			println!("{:?}", e);
-			vec![]
-		}
+        Some(val) => val.to_string(),
+        None => {
+            println!("A text file must be provided!");
+            return;
+        }
     };
-    
+    let file = File::open(&Path::new(&file_name)).unwrap();
+    let box_vals: Vec<String> = match BufReader::new(file)
+        .lines()
+        .map(|line| {
+            line.and_then(|v| {
+                v.parse::<String>()
+                    .map_err(|e| Error::new(ErrorKind::InvalidData, e))
+            })
+        })
+        .collect()
+    {
+        Ok(vals) => vals,
+        Err(e) => {
+            println!("{:?}", e);
+            vec![]
+        }
+    };
+
     let mut two_letters: u32 = 0;
     let mut three_letters: u32 = 0;
-    let mut narrow_list: Vec<&[u8]> = Vec::new(); 
+    let mut narrow_list: Vec<&[u8]> = Vec::new();
     for box_val in &box_vals {
         let chars = box_val.chars();
         let mut char_count: HashMap<char, u8> = HashMap::new();
@@ -79,7 +86,7 @@ fn main() {
             }
         }
     }
-    
+
     let mut matched: Vec<u8> = Vec::new();
     if matched_list.len() >= 2 {
         let match_one = matched_list[0];
