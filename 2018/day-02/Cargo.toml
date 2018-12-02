@@ -1,0 +1,7 @@
+[package]
+name = "day-02"
+version = "0.1.0"
+authors = ["Coty Rothery <cotyrothery@gmail.com>"]
+edition = "2018"
+
+[dependencies]
